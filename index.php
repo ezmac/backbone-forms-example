@@ -28,8 +28,8 @@
     var Header = Backbone.Model.extend({
         schema: {
         title:      'Text',
-        textArea1:  'Text',
-        textArea2:  'Text',
+        textArea1:  'TextArea',
+        textArea2:  'TextArea',
         image:      'Text'
         }
     });
