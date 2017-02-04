@@ -34,6 +34,18 @@
         }
     });
 
+    var HeaderView = Backbone.View.extend({
+      template: loadTemplate('header'),
+      render : function(){
+
+        this.$el.html(this.template(this.model.attributes));
+        return this;    
+      },
+      initialize: function() {
+        this.listenTo(this.model, "change", this.render);
+      },
+
+    });
     var header = new Header({
       title: "Title",
         textArea1:  'Text Area 1',
@@ -44,9 +56,30 @@
     var form = new Backbone.Form({
         model: header
     }).render();
+    // So at this point, you just need to bind all input elements for "on change" or add a submit button.
+    function commit(form){
+      form.commit();
+      this.preventDefault();
+
+    }
+    commitButton = $("<button type='button'>commit</button>");
+    commitAction=_.bind(function(){
+      this.commit();},
+    form);
+
+    commitButton.on("click",commitAction);
+    $(form.el).append(commitButton);
 
     $('#editor').append(form.el);
-    headerRender = loadTemplate('header');
-    $('#preview').append(headerRender(header.attributes));
+    headerViewContainer = $('<div>');
+
+    headerView = new HeaderView({
+      model: header,
+        $el: headerViewContainer
+    });
+    headerView.render();
+    headerViewContainer.append(headerView.$el);
+    
+    $('#preview').append(headerViewContainer);
   </script>
 </html>
